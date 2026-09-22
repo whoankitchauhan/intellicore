@@ -15,9 +15,16 @@ def web_search(query: str) -> str:
     The query must consist of short, specific keywords or direct questions. 
     Avoid unnecessary conversational words like 'please', 'find', or 'search for'."""
     try:
-        results = tavily.search(query=query, num_results=5)
-        return results
+        results = tavily.search(query=query, max_results=2)
+    
+        out = []
+    
+        for r in results['results']:
+            out.append(f"Title: {r['title']}\nURL: {r['url']}\nSnippet: {r['content'][:300]}\n")  
+        
+        
+        return "\n----\n".join(out)
     except Exception as e:
         return f"An error occurred while searching: {str(e)}"
 
-print(web_search.invoke("What is the latest news on AI technology?"))
+print(web_search.invoke("latest advancements in AI technology"))
